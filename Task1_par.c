@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <omp.h>
 
 int main() {
     const char *env_size = getenv("ARRAY_SIZE");
@@ -16,18 +16,20 @@ int main() {
         array[i] = i + 1;
     }
 
-    clock_t start = clock();
-
     long long sum = 0;
+
+    double start_time = omp_get_wtime();
+
+    #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < size; i++) {
         sum += array[i];
     }
 
-    clock_t end = clock();
-    double time_taken = (double)(end - start) / CLOCKS_PER_SEC;
+    double end_time = omp_get_wtime();
 
     printf("Сумма массива: %lld\n", sum);
-    printf("Время выполнения последовательной программы: %f секунд\n", time_taken);
+    printf("Время выполнения параллельной программы: %f секунд с %d потоками\n",
+           end_time - start_time, omp_get_max_threads());
 
     free(array);
     return 0;
