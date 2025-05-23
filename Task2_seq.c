@@ -30,8 +30,14 @@ void quicksort(int arr[], int low, int high) {
 }
 
 int main() {
-    int N = 200000;
+    const char* env_size = getenv("ARRAY_SIZE");
+    int N = env_size ? atoi(env_size) : 200000;
+
     int* arr = malloc(N * sizeof(int));
+    if (arr == NULL) {
+        fprintf(stderr, "Ошибка выделения памяти\n");
+        return 1;
+    }
 
     srand(time(NULL));
     for (int i = 0; i < N; i++)
@@ -41,7 +47,9 @@ int main() {
     quicksort(arr, 0, N - 1);
     clock_t end = clock();
 
-    printf("Время выполнения быстрой сортировки в последовательной программе: %.2f секунд\n", (double)(end - start) / CLOCKS_PER_SEC);
+    printf("Время выполнения последовательной программы: %.2f секунд\n",
+           (double)(end - start) / CLOCKS_PER_SEC);
+
     free(arr);
     return 0;
 }
