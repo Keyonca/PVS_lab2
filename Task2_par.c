@@ -43,14 +43,21 @@ void quicksort_parallel(int arr[], int low, int high, int depth) {
 }
 
 int main() {
-    int N = 200000;
+    // Получение размера массива из переменной окружения
+    const char* env = getenv("ARRAY_SIZE");
+    int N = env ? atoi(env) : 200000;
+
     int* arr = malloc(N * sizeof(int));
+    if (arr == NULL) {
+        fprintf(stderr, "Ошибка: не удалось выделить память\n");
+        return 1;
+    }
 
     srand(time(NULL));
     for (int i = 0; i < N; i++)
         arr[i] = rand();
 
-    int num_threads = 16;
+    int num_threads = 1;
 
     double start = omp_get_wtime();
 
@@ -65,7 +72,7 @@ int main() {
 
     double end = omp_get_wtime();
 
-    printf("Время выполнения быстрой сортировки в последовательной программе: %.2f секунд\n", end - start);
+    printf("Время выполнения быстрой сортировки в параллельной программе: %.2f секунд\n", end - start);
     printf("Потоков использовано: %d\n", num_threads);
 
     free(arr);
