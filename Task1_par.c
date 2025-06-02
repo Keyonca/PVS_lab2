@@ -28,7 +28,7 @@ int main() {
     double end_time = omp_get_wtime();
 
     printf("Сумма массива: %lld\n", sum);
-    printf("Время выполнения параллельной программы: %f секунд с %d потоками\n",
+    printf("Время выполнения параллельной программы: %f sec с %d потоками\n",
            end_time - start_time, omp_get_max_threads());
 
     free(array);
